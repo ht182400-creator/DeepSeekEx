@@ -121,7 +121,7 @@ svg { width: 20px; height: 20px; flex-shrink: 0; }
   font-size: var(--font-size-base);
   color: var(--color-text);
   cursor: pointer;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: flex-start; justify-content: space-between;
   transition: background var(--transition-fast);
   white-space: nowrap;
   overflow: hidden;
@@ -129,9 +129,9 @@ svg { width: 20px; height: 20px; flex-shrink: 0; }
 }
 .history-item:hover { background: var(--color-bg-hover); }
 .history-item.active { background: var(--color-bg-hover); }
-.history-item-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.history-item-text { overflow: hidden; text-overflow: ellipsis; }
-.history-item-time { font-size: 11px; color: var(--color-text-tertiary); }
+.history-item-main { display: block; min-width: 0; }
+.history-item-text { display: block; overflow: hidden; text-overflow: ellipsis; }
+.history-item-time { display: block; margin-top: 3px; font-size: 11px; color: var(--color-text-tertiary); }
 .history-item-actions { display: none; gap: 2px; }
 .history-item:hover .history-item-actions { display: flex; }
 .history-item-actions button { padding: 3px; border-radius: 4px; color: var(--color-text-tertiary); }
