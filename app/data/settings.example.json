@@ -1,0 +1,16 @@
+{
+  "provider": "official",
+  "api_key": "",
+  "web_token": "",
+  "model": "deepseek-flash",
+  "thinking_enabled": false,
+  "search_enabled": false,
+  "enhancements": {
+    "split_view": true,
+    "prompt_library": true,
+    "context": true,
+    "export_md": true,
+    "focus_mode": true,
+    "tools": true
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "description": "WebProvider._parse_patch_event SSE JSON patch 解析回归案例(数据驱动)",
+  "cases": [
+    {
+      "id": "TC01",
+      "name": "初始化快照含THINK与RESPONSE双fragment",
+      "events": [
+        "data: {\"v\":{\"response\":{\"fragments\":[{\"type\":\"THINK\",\"content\":\"让我思考\"},{\"type\":\"RESPONSE\",\"content\":\"你好\"}]}}}"
+      ],
+      "expected": [
+        {"type": "thinking", "text": "让我思考"},
+        {"type": "content", "text": "你好"}
+      ]
+    },
+    {
+      "id": "TC02",
+      "name": "续传事件无p字段默认RESPONSE",
+      "events": [
+        "data: {\"v\":\"世界\"}"
+      ],
+      "expected": [
+        {"type": "content", "text": "世界"}
+      ]
+    },
+    {
+      "id": "TC03",
+      "name": "指定索引content追加",
+      "events": [
+        "data: {\"p\":\"response/fragments/0/content\",\"o\":\"APPEND\",\"v\":\"补充内容\"}"
+      ],
+      "expected": [
+        {"type": "content", "text": "补充内容"}
+      ]
+    },
+    {
+      "id": "TC04",
+      "name": "追加新fragment含content",
+      "events": [
+        "data: {\"p\":\"response/fragments\",\"o\":\"APPEND\",\"v\":[{\"type\":\"RESPONSE\",\"content\":\"新片段\"}]}"
+      ],
+      "expected": [
+        {"type": "content", "text": "新片段"}
+      ]
+    },
+    {
+      "id": "TC05",
+      "name": "完成状态事件FINISHED",
+      "events": [
+        "data: {\"p\":\"response/status\",\"o\":\"SET\",\"v\":\"FINISHED\"}"
+      ],
+      "expected": [
+        {"type": "done"}
+      ]
+    },
+    {
+      "id": "TC06",
+      "name": "空事件",
+      "events": [""],
+      "expected": []
+    },
+    {
+      "id": "TC07",
+      "name": "DONE哨兵",
+      "events": ["data: [DONE]"],
+      "expected": []
+    },
+    {
+      "id": "TC08",
+      "name": "非法JSON",
+      "events": ["data: {not json"],
+      "expected": []
+    },
+    {
+      "id": "TC09",
+      "name": "完整流:思考续传后切换正文续传(截断回归)",
+      "events": [
+        "data: {\"v\":{\"response\":{\"fragments\":[{\"type\":\"THINK\",\"content\":\"分析\"}]}}}",
+        "data: {\"v\":\"过程\"}",
+        "data: {\"p\":\"response/fragments\",\"o\":\"APPEND\",\"v\":[{\"type\":\"RESPONSE\",\"content\":\"我无法\"}]}",
+        "data: {\"v\":\"提供此类信息\"}",
+        "data: {\"v\":\"，但可以帮助你\"}"
+      ],
+      "expected": [
+        {"type": "thinking", "text": "分析"},
+        {"type": "thinking", "text": "过程"},
+        {"type": "content", "text": "我无法"},
+        {"type": "content", "text": "提供此类信息"},
+        {"type": "content", "text": "，但可以帮助你"}
+      ]
+    },
+    {
+      "id": "TC10",
+      "name": "思考耗时elapsed_secs更新事件",
+      "events": [
+        "data: {\"p\":\"response/fragments/-1/elapsed_secs\",\"o\":\"SET\",\"v\":1.403554815}"
+      ],
+      "expected": [
+        {"type": "thinking_elapsed", "seconds": 1.403554815}
+      ]
+    },
+    {
+      "id": "TC11",
+      "name": "初始化快照透传搜索状态与引用来源",
+      "events": [
+        "data: {\"v\":{\"response\":{\"message_id\":2,\"search_triggered\":true,\"fragments\":[{\"type\":\"THINK\",\"content\":\"搜索中\",\"elapsed_secs\":2.5,\"references\":[{\"title\":\"官网\",\"url\":\"https://example.com\",\"snippet\":\"示例\"}]},{\"type\":\"RESPONSE\",\"content\":\"答案\"}]}}}"
+      ],
+      "expected": [
+        {"type": "session_meta", "message_id": 2},
+        {"type": "search_state", "triggered": true},
+        {"type": "thinking", "text": "搜索中"},
+        {"type": "thinking_elapsed", "seconds": 2.5},
+        {"type": "sources", "items": [{"title": "官网", "url": "https://example.com", "snippet": "示例"}]},
+        {"type": "content", "text": "答案"}
+      ]
+    },
+    {
+      "id": "TC12",
+      "name": "fragment整体回传(无op)提取耗时与引用",
+      "events": [
+        "data: {\"p\":\"response/fragments\",\"v\":[{\"type\":\"THINK\",\"content\":\"思考完成\",\"elapsed_secs\":3.2,\"references\":[{\"title\":\"来源A\",\"url\":\"https://a.com\"}]},{\"type\":\"RESPONSE\",\"content\":\"回复\"}]}"
+      ],
+      "expected": [
+        {"type": "thinking_elapsed", "seconds": 3.2},
+        {"type": "sources", "items": [{"title": "来源A", "url": "https://a.com", "snippet": ""}]}
+      ]
+    }
+  ]
+}

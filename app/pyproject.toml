@@ -1,0 +1,54 @@
+# DeepSeekEx 第三方质量工具统一配置
+# 覆盖 ruff（静态分析）与 coverage（测试覆盖率）
+
+[tool.ruff]
+target-version = "py313"      # 与运行环境 Python 3.13 保持一致
+line-length = 120             # 项目约定行宽
+src = ["."]
+extend-exclude = ["__pycache__", "*.log"]
+
+[tool.ruff.lint]
+# 精选规则集：语法/导入/现代化/常见 bug/简化/日志/安全
+select = [
+    "E", "W", "F",   # pycodestyle + Pyflakes
+    "I",             # isort 导入排序
+    "UP",            # pyupgrade 类型注解现代化
+    "B",             # flake8-bugbear
+    "SIM",           # flake8-simplify
+    "PIE",           # flake8-pie
+    "PL",            # pylint
+    "G",             # flake8-logging-format
+    "S",             # flake8-bandit 安全
+]
+ignore = [
+    # BLE001：项目约定 I/O/网络/外部进程/输入解析一律 try-catch Exception，
+    #         逐条枚举异常类型既不现实也会漏捕，统一放宽。
+    "BLE001",
+    # G201：日志规范统一使用 logger.error(msg, exc, exc_info=True) 显式形式，
+    #       与 logger.exception() 等价，保持全项目风格一致。
+    "G201",
+    # S105/S106/S107：配置默认值中的空字符串（api_key/web_token）是占位符，非硬编码口令。
+    # S603：仅调用配置中固定的本地 PoW 求解器（Go/Node），无 shell，非用户可控输入。
+    "S105", "S106", "S107", "S603",
+    # PLR0911/PLR0912/PLR0915：stream_chat 是 SSE 协议状态机，分支多为领域本质复杂度，
+    #   强行拆分会破坏生成器的连续流式语义，收益低于风险。
+    "PLR0911", "PLR0912", "PLR0915",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "PLR2004", "PLR0913"]   # 测试代码允许 assert、业务魔法数字与多参数辅助方法
+
+[tool.coverage.run]
+source = ["."]
+omit = ["tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]
+# 覆盖率目标：补测后实测 97%，设 90% 为基线（留 7% 缓冲应对后续新增未覆盖代码）
+fail_under = 90

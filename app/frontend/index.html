@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HT182400 - 探索未至之境</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <!-- 应用根容器 -->
+  <div id="app" class="app">
+    <!-- 侧边栏 -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <span class="brand-logo cham-slot" title="HT182400 变色龙"></span>
+          <span class="brand-name">HT182400</span>
+        </div>
+        <div class="header-tools">
+          <button id="btn-search-history" class="icon-btn" title="搜索历史" aria-label="搜索历史">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          </button>
+          <button id="btn-collapse" class="icon-btn" title="收起边栏" aria-label="收起边栏">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button id="btn-new-chat" class="new-chat-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        <span>开启新对话</span>
+      </button>
+
+      <div id="history-list" class="history-list">
+        <!-- 历史对话由JS渲染 -->
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="avatar" id="user-avatar">田</div>
+        <span class="user-name" id="user-name">用户</span>
+        <button id="btn-user-menu" class="icon-btn" title="更多" aria-label="更多">
+          <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main">
+      <!-- 顶部工具栏（侧边栏收起时显示） -->
+      <div class="topbar" id="topbar">
+        <button id="btn-expand" class="icon-btn" title="展开边栏" aria-label="展开边栏">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        </button>
+        <button id="btn-search-top" class="icon-btn" title="搜索" aria-label="搜索">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        </button>
+        <button id="btn-new-top" class="icon-btn" title="新对话" aria-label="新对话">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        </button>
+        <span class="chat-title-top" id="chat-title-top"></span>
+        <!-- 增强层工具栏(可在设置中关闭) -->
+        <div class="enhance-tools" id="enhance-tools">
+          <button id="btn-prompt-lib" class="icon-btn" title="提示词库" aria-label="提示词库">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          </button>
+          <button id="btn-export" class="icon-btn" title="导出对话" aria-label="导出对话">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M8 11l4 4 4-4M4 17v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+          </button>
+          <button id="btn-focus" class="icon-btn" title="专注模式" aria-label="专注模式">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg>
+          </button>
+        </div>
+        <!-- Provider 状态指示器 -->
+        <span class="provider-badge" id="provider-badge" title="当前对话后端">官方 API</span>
+        <button id="btn-share" class="icon-btn" title="分享/复制对话" aria-label="分享对话">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M12 16V3M8 7l4-4 4 4"/></svg>
+        </button>
+        <button id="btn-settings" class="icon-btn" title="设置" aria-label="设置">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 01-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 01-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.6-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 012.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 012.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+        </button>
+      </div>
+
+      <!-- 欢迎页 / 对话区 -->
+      <div id="welcome" class="welcome">
+        <div class="welcome-title">
+          <span class="welcome-logo cham-slot" title="HT182400 变色龙"></span>
+          <h1>你好，让我们开始聊天吧</h1>
+        </div>
+      </div>
+
+      <div id="chat-area" class="chat-area hidden">
+        <div id="messages" class="messages"></div>
+      </div>
+      <!-- 右侧消息大纲:固定在主区右侧垂直居中,不随消息滚动 -->
+      <nav id="outline-nav" class="outline-nav hidden" title="消息大纲"></nav>
+
+      <!-- 输入区 -->
+      <div class="input-zone">
+        <div class="input-box" id="input-box">
+          <textarea id="message-input" name="search" placeholder="给 HT182400 发送消息" rows="2"></textarea>
+          <div class="input-actions">
+            <div class="mode-chips">
+              <button id="chip-thinking" class="chip" title="深度思考">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a6 6 0 00-6 6c0 2 1 3 2 4-1 1-2 2-2 4a6 6 0 006 6 6 6 0 006-6c0-2-1-3-2-4 1-1 2-2 2-4a6 6 0 00-6-6z"/></svg>
+                <span>深度思考</span>
+              </button>
+              <button id="chip-search" class="chip" title="智能搜索">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>
+                <span>智能搜索</span>
+              </button>
+            </div>
+            <div class="right-actions">
+              <button id="btn-attach" class="icon-btn" title="上传附件" aria-label="上传附件">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.4 11.6l-8.5 8.5a5 5 0 01-7.1-7.1l9.2-9.2a3.3 3.3 0 014.7 4.7l-9.2 9.2a1.7 1.7 0 01-2.4-2.4l8.5-8.5"/></svg>
+              </button>
+              <span id="context-meter" class="context-meter hidden" title="上下文用量估算"><span id="context-meter-bar"></span></span>
+              <button id="btn-stop" class="stop-btn hidden" title="停止生成" aria-label="停止生成">
+                <svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>
+              </button>
+              <button id="btn-send" class="send-btn" title="发送" aria-label="发送" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+              </button>
+            </div>
+          </div>
+          <input type="file" id="file-input" multiple hidden>
+          <div id="attachment-list" class="attachment-list"></div>
+        </div>
+        <div class="disclaimer">内容由 AI 生成，请仔细甄别</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 用户菜单弹层 -->
+  <div id="user-menu" class="popup-menu hidden">
+    <div class="menu-user-info"><div class="avatar-mini" id="menu-avatar">田</div><span id="menu-name">用户</span></div>
+    <div class="menu-divider"></div>
+    <button class="menu-item" data-action="theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg><span>深色模式</span></button>
+    <button class="menu-item" data-action="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 01-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1.1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 01-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.6-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.6-1.1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 012.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.6V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 012.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.6 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg><span>设置</span></button>
+    <button class="menu-item" data-action="logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>退出登录</span></button>
+  </div>
+
+  <!-- 搜索历史弹层 -->
+  <div id="search-modal" class="modal hidden">
+    <div class="modal-mask"></div>
+    <div class="modal-panel">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="text" id="search-history-input" placeholder="搜索历史对话" autocomplete="off">
+      </div>
+      <div id="search-results" class="search-results"></div>
+    </div>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- 设置弹层:配置 Provider / API Key / Token / 增强功能开关 -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-mask" data-close="settings-modal"></div>
+    <div class="modal-panel settings-panel">
+      <div class="modal-head">
+        <h2>设置</h2>
+        <button class="icon-btn" data-close="settings-modal" aria-label="关闭">×</button>
+      </div>
+      <div class="settings-body">
+        <div class="setting-section">
+          <div class="section-title">对话后端</div>
+          <div class="provider-tabs">
+            <button class="provider-tab active" data-provider="official">官方 API</button>
+            <button class="provider-tab" data-provider="web">网页登录态</button>
+          </div>
+          <p class="setting-hint" id="provider-hint">使用 DeepSeek 官方 API,需填入 API Key(按量计费)</p>
+        </div>
+
+        <div class="setting-section" id="official-config">
+          <label class="field-label">API Key</label>
+          <input type="password" id="setting-api-key" placeholder="sk-xxxxxxxxxxxxxxxx" autocomplete="off">
+          <p class="field-hint">在 platform.deepseek.com/api_keys 申请。Key 仅存于服务端配置文件,不写入代码。</p>
+          <button class="validate-btn" id="btn-validate">验证 Key</button>
+        </div>
+
+        <div class="setting-section hidden" id="web-config">
+          <label class="field-label">网页端 userToken</label>
+          <textarea id="setting-web-token" rows="3" placeholder="从 ego-lite 浏览器 localStorage 的 userToken 复制" autocomplete="off"></textarea>
+          <p class="field-hint">在已登录的 chat.deepseek.com 控制台执行: JSON.parse(localStorage.getItem('userToken')).value</p>
+          <button class="validate-btn" id="btn-validate-web">验证 Token</button>
+        </div>
+
+        <div class="setting-section">
+          <div class="section-title">模型</div>
+          <select id="setting-model">
+            <option value="deepseek-flash">deepseek-flash (V4.1-Flash,快速)</option>
+            <option value="deepseek-v4-pro">deepseek-v4-pro (V4-Pro,强推理)</option>
+          </select>
+        </div>
+
+        <div class="setting-section">
+          <div class="section-title">增强功能(叠加在 1:1 复刻界面之上)</div>
+          <label class="switch-row"><span>提示词库 / 导出 / 专注模式</span><input type="checkbox" id="enhance-tools-switch" checked></label>
+          <label class="switch-row"><span>上下文用量显示</span><input type="checkbox" id="enhance-context-switch"></label>
+        </div>
+
+        <div class="setting-footer">
+          <span id="validate-result" class="validate-result"></span>
+          <button class="save-btn" id="btn-save-settings">保存设置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 提示词库弹层(增强功能) -->
+  <div id="prompt-library" class="modal hidden">
+    <div class="modal-mask" data-close="prompt-library"></div>
+    <div class="modal-panel prompt-panel">
+      <div class="modal-head">
+        <h2>提示词库</h2>
+        <button class="icon-btn" data-close="prompt-library" aria-label="关闭">×</button>
+      </div>
+      <div class="prompt-list" id="prompt-list"></div>
+    </div>
+  </div>
+
+  <script src="/static/data.js"></script>
+  <script src="/static/utils.js"></script>
+  <script src="/static/actions.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

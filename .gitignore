@@ -1,0 +1,60 @@
+# ============================================================
+# DeepSeek Studio - Git 忽略规则
+# 原则：只上传源码 + 文档；不上传凭据、真实数据、安装包、测试环境
+# ============================================================
+
+# ---------- 敏感数据（最高优先级，绝不上传） ----------
+# 真实配置含 API Key / userToken，仅上传示例模板
+app/data/settings.json
+app/data/chats.json
+# 若未来新增凭据文件也一并忽略
+*.token
+*.secret
+.env
+.env.*
+
+# ---------- 安装包 / 编译产物 / 大型工具链 ----------
+# Go 工具链（199MB，仅编译时需要，不随源码分发）
+tools/
+# 预编译求解器二进制（用户按 README 自行编译或走 WASM/Python 回退）
+*.exe
+*.dll
+*.so
+*.dylib
+# 前端依赖（npm install 可复原）
+node_modules/
+
+# ---------- Python 测试/运行环境 ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# ---------- 日志与测试产物 ----------
+*.log
+app/logs/
+app/tests/logs/
+
+# ---------- 早期原型（已被 app/ 取代，非必须代码） ----------
+replica/
+enhanced/
+
+# ---------- 编辑器 / 系统临时文件 ----------
+.vscode/
+.idea/
+*.swp
+*.tmp
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---------- CodeBuddy 本地数据（项目相关但属本机数据，不上传） ----------
+.codebuddy/

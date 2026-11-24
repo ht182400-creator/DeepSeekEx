@@ -1,0 +1,13 @@
+{
+  "name": "deepseek-studio-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DeepSeek Studio 原生 JS 前端 - ESLint 静态检查配置",
+  "scripts": {
+    "lint": "eslint data.js utils.js actions.js app.js",
+    "lint:fix": "eslint data.js utils.js actions.js app.js --fix"
+  },
+  "devDependencies": {
+    "eslint": "^10.15.0"
+  }
+}
