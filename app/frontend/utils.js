@@ -8,6 +8,25 @@
 /** HTML 转义,防止 XSS */
 function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 
+/**
+ * 格式化会话时间为「年-月-日 时:分:秒」,用于历史列表展示会话创建时间
+ * @param {string} iso 后端 ISO 时间字符串
+ * @returns {string} 格式化后的时间;无效时间返回空串
+ */
+function formatFullTime(iso) {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
+      `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  } catch (exc) {
+    logError('格式化时间失败: ' + exc);
+    return '';
+  }
+}
+
 /** 滚动对话区到底部 */
 function scrollToBottom() { if (ui.chatArea) ui.chatArea.scrollTop = ui.chatArea.scrollHeight; }
 

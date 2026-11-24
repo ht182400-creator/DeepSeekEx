@@ -36,6 +36,7 @@ const projectConstants = {
 const projectFunctions = {
   ui: 'writable', appState: 'writable', abortController: 'writable',
   utils: 'readonly', escapeHtml: 'readonly', esc: 'readonly', formatTime: 'readonly',
+  formatFullTime: 'readonly',
   renderMarkdown: 'readonly', scrollToBottom: 'readonly', copyText: 'readonly',
   speakText: 'readonly', logDebug: 'readonly', logInfo: 'readonly', logWarning: 'readonly',
   logError: 'readonly', injectChameleons: 'readonly', showToast: 'readonly',
