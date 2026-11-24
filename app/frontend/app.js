@@ -697,10 +697,12 @@ function renderHistory() {
       items.forEach((item) => {
         const el = document.createElement('div');
         el.className = 'history-item' + (item.id === appState.currentChatId ? ' active' : '');
-        const timeText = formatFullTime(item.created_at);
+        const createdText = formatFullTime(item.created_at);
+        const updatedText = formatFullTime(item.updated_at);
         el.innerHTML = `<div class="history-item-main">
+            ${createdText ? `<div class="history-item-time">创建时间：${createdText}</div>` : ''}
             <div class="history-item-text" title="双击重命名">${esc(item.title)}</div>
-            ${timeText ? `<div class="history-item-time">${timeText}</div>` : ''}
+            ${updatedText ? `<div class="history-item-time">最近聊天时间：${updatedText}</div>` : ''}
           </div>
           <span class="history-item-actions">
             <button data-action="rename" title="重命名">✎</button>

@@ -131,7 +131,9 @@ svg { width: 20px; height: 20px; flex-shrink: 0; }
 .history-item.active { background: var(--color-bg-hover); }
 .history-item-main { display: block; min-width: 0; }
 .history-item-text { display: block; overflow: hidden; text-overflow: ellipsis; }
-.history-item-time { display: block; margin-top: 3px; font-size: 11px; color: var(--color-text-tertiary); }
+.history-item-time { display: block; font-size: 11px; color: var(--color-text-tertiary); }
+.history-item-time + .history-item-text { margin-top: 2px; }
+.history-item-text + .history-item-time { margin-top: 2px; }
 .history-item-actions { display: none; gap: 2px; }
 .history-item:hover .history-item-actions { display: flex; }
 .history-item-actions button { padding: 3px; border-radius: 4px; color: var(--color-text-tertiary); }
